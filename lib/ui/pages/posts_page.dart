@@ -3,20 +3,24 @@
 // Demonstrates: Future + REST API + the four snapshot states.
 import 'package:flutter/material.dart';
 
-import '../models/post.dart';
-import '../services/post_service.dart';
+import '../../models/post.dart';
+import '../../services/post_service.dart';
+import '../atoms/loading_spinner.dart';
+import '../atoms/message_text.dart';
+import '../molecules/error_retry.dart';
+import '../organisms/posts_list.dart';
 
-class PostsScreen extends StatefulWidget {
+class PostsPage extends StatefulWidget {
   // loadPosts can be swapped in tests, so no real network is needed.
-  const PostsScreen({super.key, this.loadPosts = fetchPosts});
+  const PostsPage({super.key, this.loadPosts = fetchPosts});
 
   final Future<List<Post>> Function() loadPosts;
 
   @override
-  State<PostsScreen> createState() => _PostsScreenState();
+  State<PostsPage> createState() => _PostsPageState();
 }
 
-class _PostsScreenState extends State<PostsScreen> {
+class _PostsPageState extends State<PostsPage> {
   late Future<List<Post>> _postsFuture;
 
   @override
@@ -45,40 +49,21 @@ class _PostsScreenState extends State<PostsScreen> {
   // Check the branches in this order: waiting, error, empty, data.
   Widget _buildBody(BuildContext ctx, AsyncSnapshot<List<Post>> snap) {
     if (snap.connectionState == ConnectionState.waiting) {
-      return const Center(child: CircularProgressIndicator());
+      return const LoadingSpinner();
     }
 
     if (snap.hasError) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Something went wrong: ${snap.error}'),
-            const SizedBox(height: 12),
-            ElevatedButton(onPressed: _retry, child: const Text('Retry')),
-          ],
-        ),
+      return ErrorRetry(
+        message: 'Something went wrong: ${snap.error}',
+        onRetry: _retry,
       );
     }
 
     final posts = snap.data!;
     if (posts.isEmpty) {
-      return const Center(child: Text('Nothing here yet'));
+      return const MessageText('Nothing here yet');
     }
 
-    return ListView.builder(
-      itemCount: posts.length,
-      itemBuilder: (context, index) {
-        final post = posts[index];
-        return ListTile(
-          title: Text(post.title),
-          subtitle: Text(
-            post.body,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        );
-      },
-    );
+    return PostsList(posts: posts);
   }
 }

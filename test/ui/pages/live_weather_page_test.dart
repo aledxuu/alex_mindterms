@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:future_stream_demo/models/weather.dart';
-import 'package:future_stream_demo/screens/live_weather_screen.dart';
+import 'package:future_stream_demo/ui/pages/live_weather_page.dart';
 
 void main() {
   // Our own conveyor belt: the test decides what goes on it and when.
@@ -18,7 +18,7 @@ void main() {
     return tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: LiveWeatherScreen(openStream: () => controller.stream),
+          body: LiveWeatherPage(openStream: () => controller.stream),
         ),
       ),
     );

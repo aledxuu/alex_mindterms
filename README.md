@@ -43,11 +43,15 @@ flutter test
 | `lib/models/weather.dart` | `Weather.fromJson`: reading nested JSON (`json['current']`) |
 | `lib/services/post_service.dart` | `fetchPosts()`: REST GET, status check, timeout |
 | `lib/services/weather_service.dart` | `fetchWeather()` and `weatherStream()` (`async*` polling loop) |
-| `lib/screens/posts_screen.dart` | FutureBuilder = status board; the four snapshot branches; `_retry` |
-| `lib/screens/live_weather_screen.dart` | StreamBuilder; create the Stream once |
-| `lib/screens/home_screen.dart` | `DefaultTabController`, two tabs |
-| `test/posts_screen_test.dart` | Testing a FutureBuilder with a fake `loadPosts` |
-| `test/live_weather_screen_test.dart` | Testing a StreamBuilder with a `StreamController` |
+| `lib/ui/pages/posts_page.dart` | FutureBuilder = status board; the four snapshot branches; `_retry` |
+| `lib/ui/pages/live_weather_page.dart` | StreamBuilder; create the Stream once |
+| `lib/ui/pages/home_page.dart` | Home page: fills the tabbed template with the two pages |
+| `lib/ui/templates/tabbed_template.dart` | `DefaultTabController`, two tabs (layout only) |
+| `lib/ui/organisms/` | `PostsList`, `WeatherCard` |
+| `lib/ui/molecules/` | `PostTile`, `WeatherReadout`, `ErrorRetry` |
+| `lib/ui/atoms/` | `LoadingSpinner`, `MessageText`, `AppButton` |
+| `test/ui/pages/posts_page_test.dart` | Testing a FutureBuilder with a fake `loadPosts` |
+| `test/ui/pages/live_weather_page_test.dart` | Testing a StreamBuilder with a `StreamController` |
 
 ## Break it on purpose
 
@@ -59,7 +63,7 @@ flutter test
    *main* `AndroidManifest.xml`, then run `flutter run --release` on an Android device.
    Debug builds still work (the debug manifest has the permission), but the release build can't reach
    the network. This is a classic "works on my machine" bug.
-3. **Call `fetchPosts()` inside `build()`.** In `posts_screen.dart`, change
+3. **Call `fetchPosts()` inside `build()`.** In `posts_page.dart`, change
    `future: _postsFuture` to `future: fetchPosts()` and watch the console or network log.
    Every rebuild (for example, resizing the window) sends a new request, and the status board flickers.
    That is why the Future is created once, in `initState`.

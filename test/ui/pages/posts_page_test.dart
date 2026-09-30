@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:future_stream_demo/models/post.dart';
-import 'package:future_stream_demo/screens/posts_screen.dart';
+import 'package:future_stream_demo/ui/pages/posts_page.dart';
 
 const _posts = [
   Post(id: 1, title: 'First post', body: 'Body one'),
   Post(id: 2, title: 'Second post', body: 'Body two'),
 ];
 
-// Wraps PostsScreen the way HomeScreen would (inside a Scaffold).
+// Wraps PostsPage the way HomePage would (inside a Scaffold).
 Widget _app(Future<List<Post>> Function() loadPosts) {
   return MaterialApp(
-    home: Scaffold(body: PostsScreen(loadPosts: loadPosts)),
+    home: Scaffold(body: PostsPage(loadPosts: loadPosts)),
   );
 }
 

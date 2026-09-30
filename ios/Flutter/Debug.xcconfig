@@ -1,1 +1,4 @@
 #include "Generated.xcconfig"
+
+// Xcode 27's lipo rejects Flutter 3.44's multi-arch -verify_arch check; simulator builds are arm64-only.
+EXCLUDED_ARCHS[sdk=iphonesimulator*] = x86_64
